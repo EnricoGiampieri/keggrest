@@ -7,4 +7,5 @@ setup(name='keggrest',
       author='Enrico Giampieri',
       author_email='enrico.giampieri@unibo.it',
       py_modules=['keggrest'],
+      download_url='https://github.com/EnricoGiampieri/keggrest.git'
       )
