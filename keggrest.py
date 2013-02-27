@@ -87,21 +87,6 @@ def KEGGget(element, option='', **kwargs):
     return result
 
 
-def KEGGfind(database, description, option='', **kwargs):
-    # options = aaseq | ntseq | mol | kcf | image | kgml
-    data = RESTrequest('get', element, option, **kwargs)
-    data = data.split('\n')
-    grouped = list(l.split(' ', 1) for l in data)
-    grouped = [l for l in grouped if len(l) > 1]
-    result = defaultdict(list)
-    last_key = None
-    for key, value in grouped:
-        if key.strip():
-            last_key = key.strip()
-        result[last_key].append(value.strip())
-    return result
-
-
 def KEGGbrite(britename, option='', **kwargs):
     path_brite = RESTrequest('get', britename)
     BRITE = {}
