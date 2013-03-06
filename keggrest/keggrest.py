@@ -10,8 +10,8 @@ def print_verbose(verbose, text):
 
 
 def RESTrequest(*args, **kwargs):
-    """ritorna e salva il blob di dati che viene restituito
-    da KEGG senza badare alla formattazione"""
+    """return and save the blob of data that is returned
+    from kegg without caring to the format"""
     verbose = kwargs.get('verbose', False)
     force_download = kwargs.get('force', False)
     save = kwargs.get('force', True)
@@ -21,7 +21,7 @@ def RESTrequest(*args, **kwargs):
     args = [a for a in args if a]
     request = 'http://rest.kegg.jp/' + "/".join(args)
     print_verbose(verbose, "richiedo la pagina: " + request)
-    filename = "./KEGG_" + "_".join(args)
+    filename = "KEGG_" + "_".join(args)
     try:
         if force_download:
             raise IOError()
@@ -113,32 +113,32 @@ if __name__ == "__main__":
     print data.keys()
 
 if __name__ == "__main__":
-    # lista dei pathway umani
+    # list of human pathway
     data_path_defs = KEGGlist('pathway', 'hsa')
     print len(data_path_defs), data_path_defs.items()[0]
 
 if __name__ == "__main__":
-    # lista dei geni umani
+    # list of human genes
     data_gene_defs = KEGGlist('hsa')
     print len(data_gene_defs), data_gene_defs.items()[0]
 
 if __name__ == "__main__":
-    # lista dei compund
+    # list of compounds
     data_comp_defs = KEGGlist('compound')
     print len(data_comp_defs), data_comp_defs.items()[0]
 
 if __name__ == "__main__":
-    # lista delle reazioni
+    # list of reactions
     data_reac_defs = KEGGlist('reaction')
     print len(data_reac_defs), data_reac_defs.items()[0]
 
 if __name__ == "__main__":
-    # lista delle coppie di reazioni
+    # list of reaction couples
     data_rpair_defs = KEGGlist('rpair')
     print len(data_rpair_defs), data_rpair_defs.items()[0]
 
 if __name__ == "__main__":
-    # collegamento fra pathway e geni negli umani
+    # link between human genes and pathways
     data_lph, data_lhp = KEGGlink('pathway', 'hsa')
     print len(data_lph), data_lph.items()[0]
     print len(data_lhp), data_lhp.items()[0]
