@@ -21,8 +21,6 @@ setup(name='keggrest',
       long_description=read('README.txt'),
       keywords = "rest API bioinformatics",
       classifiers=[
-          "Development Status :: 0.1",
-          "Topic :: Utilities",
           "License :: OSI Approved :: BSD License",
           "Development Status :: 3 - Alpha",
           "Intended Audience :: Science/Research",
