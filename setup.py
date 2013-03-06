@@ -10,11 +10,11 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(name='keggrest',
-      version='0.1',
+      version='0.1.1',
       description='Basic frontend for the kegg database rest API',
       author='Enrico Giampieri',
       author_email='enrico.giampieri@unibo.it',
-      py_modules=['keggrest'],
+      packages=['keggrest'],
       download_url='https://github.com/EnricoGiampieri/keggrest.git',
       url='https://github.com/EnricoGiampieri/keggrest.git',
       license = "BSD",
