@@ -1,30 +1,33 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function, unicode_literals, division	
+
 from itertools import chain, groupby
 from collections import defaultdict
-import urllib2
-import pickle
 
+#python 2& £ compatibility layer
+try:
+    from urllib2 import urlopen, HTTPError
+except ImportError:
+    from urllib.request import urlopen
+    from urllib.error import HTTPError
+    
 
 def print_verbose(verbose, text):
     if verbose:
-        print text
-
+        print(text)
 
 def RESTrequest(*args, **kwargs):
     """return and save the blob of data that is returned
     from kegg without caring to the format"""
-
     # so you can copy paste from kegg
     args = list(chain.from_iterable(a.split('/') for a in args))
     args = [a for a in args if a]
     request = 'http://rest.kegg.jp/' + "/".join(args)
-    
     try:
-        req = urllib2.urlopen(request)
+        req = urlopen(request)
         data = req.read()
-
     # clean the error stacktrace
-    except urllib2.HTTPError as e:
+    except HTTPError as e:
         raise e
         
     return data

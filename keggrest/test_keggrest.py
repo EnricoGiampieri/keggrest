@@ -4,6 +4,7 @@ Created on Mon Apr 14 11:52:46 2014
 
 @author: enrico.giampieri2
 """
+from __future__ import print_function, unicode_literals, division	
 
 import keggrest
 import unittest
