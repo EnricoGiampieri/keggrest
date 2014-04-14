@@ -13,32 +13,16 @@ def print_verbose(verbose, text):
 def RESTrequest(*args, **kwargs):
     """return and save the blob of data that is returned
     from kegg without caring to the format"""
-    verbose = kwargs.get('verbose', False)
-    force_download = kwargs.get('force', False)
-    save = kwargs.get('force', True)
 
     # so you can copy paste from kegg
     args = list(chain.from_iterable(a.split('/') for a in args))
     args = [a for a in args if a]
     request = 'http://rest.kegg.jp/' + "/".join(args)
-    print_verbose(verbose, "richiedo la pagina: " + request)
-#    filename = "KEGG_" + "_".join(args)
-#    try:
-#        if force_download:
-#            raise IOError()
-#        print_verbose(verbose, "loading the cached file " + filename)
-#        with open(filename, 'r') as f:
-#            data = pickle.load(f)
-#    except IOError:
-    print_verbose(verbose, "downloading the library,it may take some time")
     
     try:
         req = urllib2.urlopen(request)
         data = req.read()
-#        if save:
-#            with open(filename, 'w') as f:
-#                print_verbose(verbose, "saving the file to " + filename)
-#                pickle.dump(data, f)
+
     # clean the error stacktrace
     except urllib2.HTTPError as e:
         raise e
