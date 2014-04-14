@@ -19,7 +19,11 @@ class SimplisticTest(unittest.TestCase):
     def test_keggrest_run_1(self):
         data = keggrest.RESTrequest('get', 'path:hsa00232')
         self.assertTrue(data is not None)
-##
+
+    def test_keggrest_run_2(self):
+        data = keggrest.KEGGget('path:hsa00232')
+        self.assertTrue(data is not None)
+        
 #if __name__ == "__main__":
 #    # get the data out of a definition
 #    data = KEGGget('path:hsa00232')

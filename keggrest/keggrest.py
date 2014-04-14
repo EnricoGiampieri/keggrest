@@ -6,7 +6,7 @@ from compatibility import *
 from itertools import chain, groupby
 from collections import defaultdict
 
-#python 2& £ compatibility layer
+#python 2 & 3 compatibility layer
 try:
     from urllib2 import urlopen, HTTPError
 except ImportError:
@@ -20,18 +20,32 @@ def print_verbose(verbose, text):
 
 def RESTrequest(*args, **kwargs):
     """return and save the blob of data that is returned
-    from kegg without caring to the format"""
+    from kegg without caring to the format
+    
+    cache should be a mappable where the results of the query are stored
+    """
+    
+    cache = kwargs.get('cache', None)
     # so you can copy paste from kegg
     args = list(chain.from_iterable(a.split('/') for a in args))
     args = [a for a in args if a]
     request = 'http://rest.kegg.jp/' + "/".join(args)
-    try:
-        req = urlopen(request)
-        data = req.read()
-    # clean the error stacktrace
-    except HTTPError as e:
-        raise e
+    def ulr_request():
+        try:
+            req = urlopen(request)
+            data = req.read()
+        except HTTPError as e:
+            raise e
+        return data
         
+    if cache is not None:
+        if request not in cache:
+            data = ulr_request()
+            cache[request] = data
+        else:
+            data = cache[request]
+    else:
+        data = ulr_request()
     return data
 
 
