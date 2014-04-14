@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function, unicode_literals, division	
 
-from compatibility import *
+from compatibility import unicode
 
 from itertools import chain, groupby
 from collections import defaultdict
@@ -25,18 +25,18 @@ def RESTrequest(*args, **kwargs):
     cache should be a mappable where the results of the query are stored
     """
     
-    cache = kwargs.get('cache', None)
+    cache = kwargs.get(u'cache', None)
     # so you can copy paste from kegg
-    args = list(chain.from_iterable(a.split('/') for a in args))
+    args = list(chain.from_iterable(a.split(u'/') for a in args))
     args = [a for a in args if a]
-    request = 'http://rest.kegg.jp/' + "/".join(args)
+    request = u'http://rest.kegg.jp/' + u"/".join(args)
     def ulr_request():
         try:
             req = urlopen(request)
             data = req.read()
         except HTTPError as e:
             raise e
-        return data
+        return unicode(data)
         
     if cache is not None:
         if request not in cache:
@@ -50,8 +50,8 @@ def RESTrequest(*args, **kwargs):
 
 
 def KEGGlink(db1, db2, **kwargs):
-    data = RESTrequest('link', db1, db2, **kwargs)
-    data = [tuple(d.split('\t')) for d in data.split('\n')][:-1]
+    data = RESTrequest(u'link', db1, db2, **kwargs)
+    data = [tuple(d.split(u'\t')) for d in data.split(u'\n')][:-1]
     rel_dir = defaultdict(list)
     rel_inv = defaultdict(list)
     for element_1, element_2 in data:
@@ -61,8 +61,8 @@ def KEGGlink(db1, db2, **kwargs):
 
 
 def KEGGconv(db1, db2, **kwargs):
-    data = RESTrequest('conv', db1, db2, **kwargs)
-    data = [tuple(d.split('\t')) for d in data.split('\n')][:-1]
+    data = RESTrequest(u'conv', db1, db2, **kwargs)
+    data = [tuple(d.split(u'\t')) for d in data.split(u'\n')][:-1]
     rel_dir = defaultdict(list)
     rel_inv = defaultdict(list)
     for element_1, element_2 in data:
@@ -71,17 +71,17 @@ def KEGGconv(db1, db2, **kwargs):
     return rel_dir, rel_inv
 
 
-def KEGGlist(db, organism='', **kwargs):
-    data = RESTrequest('list', db, organism, **kwargs)
-    data = [tuple(d.split('\t')) for d in data.split('\n')][:-1]
+def KEGGlist(db, organism=u'', **kwargs):
+    data = RESTrequest(u'list', db, organism, **kwargs)
+    data = [tuple(d.split(u'\t')) for d in data.split(u'\n')][:-1]
     return dict(data)
 
 
-def KEGGget(element, option='', **kwargs):
+def KEGGget(element, option=u'', **kwargs):
     # options = aaseq | ntseq | mol | kcf | image | kgml
-    data = RESTrequest('get', element, option, **kwargs)
-    data = data.split('\n')
-    grouped = list(l.split(' ', 1) for l in data)
+    data = RESTrequest(u'get', element, option, **kwargs)
+    data = data.split(u'\n')
+    grouped = list(l.split(u' ', 1) for l in data)
     grouped = [l for l in grouped if len(l) > 1]
     result = defaultdict(list)
     last_key = None
@@ -93,21 +93,21 @@ def KEGGget(element, option='', **kwargs):
 
 
 def KEGGbrite(britename, option='', **kwargs):
-    path_brite = RESTrequest('get', britename)
+    path_brite = RESTrequest(u'get', britename)
     BRITE = {}
     lines = path_brite.splitlines()
     for line in lines:
         key = line[0]
         line = line[1:].strip()
-        if key == 'A':
+        if key == u'A':
             BRITE_sub = {}
             BRITE[line] = BRITE_sub
-        if key == 'B':
+        if key == u'B':
             BRITE_sub_sub = {}
             BRITE_sub[line] = BRITE_sub_sub
-        if key == 'C':
+        if key == u'C':
             map_key, name = line.split(' ', 1)
             BRITE_sub_sub[map_key] = name
-    info = "\n".join(
-        line[1:] for line in path_brite.splitlines() if line[0] == '#')
+    info = u"\n".join(
+        line[1:] for line in path_brite.splitlines() if line[0] == u'#')
     return BRITE, info

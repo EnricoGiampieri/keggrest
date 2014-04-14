@@ -7,7 +7,7 @@ Created on Mon Apr 14 11:52:46 2014
 @author: enrico.giampieri2
 """
 
-from compatibility import *
+from compatibility import unicode
 
 import keggrest
 import unittest
@@ -17,11 +17,11 @@ class SimplisticTest(unittest.TestCase):
         self.assertTrue(True)
     
     def test_keggrest_run_1(self):
-        data = keggrest.RESTrequest('get', 'path:hsa00232')
+        data = keggrest.RESTrequest(u'get', u'path:hsa00232')
         self.assertTrue(data is not None)
 
     def test_keggrest_run_2(self):
-        data = keggrest.KEGGget('path:hsa00232')
+        data = keggrest.KEGGget(u'path:hsa00232')
         self.assertTrue(data is not None)
         
 #if __name__ == "__main__":
