@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function, unicode_literals, division	
 
+from compatibility import *
+
 from itertools import chain, groupby
 from collections import defaultdict
 

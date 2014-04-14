@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function, unicode_literals, division	
+
 """
 Created on Mon Apr 14 11:52:46 2014
 
 @author: enrico.giampieri2
 """
-from __future__ import print_function, unicode_literals, division	
+
+from compatibility import *
 
 import keggrest
 import unittest
@@ -15,7 +18,7 @@ class SimplisticTest(unittest.TestCase):
     
     def test_keggrest_run_1(self):
         data = keggrest.RESTrequest('get', 'path:hsa00232')
-        self.assertTrue(True)
+        self.assertTrue(data is not None)
 ##
 #if __name__ == "__main__":
 #    # get the data out of a definition
