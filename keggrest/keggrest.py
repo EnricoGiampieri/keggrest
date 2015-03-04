@@ -109,7 +109,7 @@ def RESTrequest(*args):
 # %%
 
 
-def KEGGlink(db1, db2, **kwargs):
+def KEGGlink(db1, db2):
     """Links the content of two different databases.
 
     It returns two dictionaries, giving the direct and inverse linkage
@@ -163,7 +163,7 @@ def KEGGlink(db1, db2, **kwargs):
         gene2paths, path2genes = keggrest.KEGGlink('pathway', 'hsa')
     """
 
-    data = RESTrequest(u'link', db1, db2, **kwargs)
+    data = RESTrequest(u'link', db1, db2)
     couples = _split_lines(data)
     return _double_way_hashtable(couples)
 
