@@ -110,54 +110,57 @@ def RESTrequest(*args):
 
 
 def KEGGlink(db1, db2, **kwargs):
-    """link the content of two different databases.
+    """Links the content of two different databases.
 
-    it returns two dictionaries, giving the direct and inverse linkage
-    between the two databases
+    It returns two dictionaries, giving the direct and inverse linkage
+    between the two databases.
 
-    use the keyword cache with a mapping to use a cache of the downloaded data
+    Usage
+    =======
 
-    ===
-    USAGE
-    ===
+    The function takes the name of the two databases that should be
+    linked. The databases should be one of the following:
+        * pathway
+        * brite
+        * module
+        * disease
+        * drug
+        * environ
+        * ko
+        * genome
+        * <org> (the organism code to be linked)
+        * compound
+        * glycan
+        * reaction
+        * rpair
+        * rclass
+        * enzyme
+        * genes
+        * pubmed
 
-    http://rest.kegg.jp/link/<target_db>/<source_db>
+    It is possible to replace the second database with an entry from a
+    different database, obtaining the list of partial relationships
+    between that single element and all the elements from the other
+    database
 
-    <target_db> = <database>
-    <source_db> = <database>
-    <database> = pathway | brite | module | disease | drug |
-                 environ | ko | genome | <org> | compound | glycan |
-                 reaction | rpair | rclass | enzyme
+    Correspond to the following rest request::
 
-    http://rest.kegg.jp/link/<target_db>/<dbentries>
-    <dbentries> = KEGG database entries involving the following <database>
-    <database> = pathway | brite | module | disease | drug | environ | ko |
-                 genome | <org> | compound | glycan | reaction | rpair |
-                 rclass | enzyme | genes
+        http://rest.kegg.jp/link/<target_db>/<source_db>
 
-    ===
     EXAMPLES
-    ===
+    =========
 
-    /link/pathway/hsa
-        KEGG pathways linked from each of the human genes
-    /link/hsa/pathway
-        human genes linked from each of the KEGG pathways
-    /link/pathway/hsa:10458+ece:Z5100
-        KEGG pathways linked from a human gene and an E. coli O157 gene
-    /link/genes/K00500
-        List of genes with the KO assignment of K00500
-    /link/genes/hsa00010
-    /link/hsa/hsa00010
-        List of human genes in pathway hsa00010
-    /link/ko/map00010 or /link/ko/ko00010
-        List of KO entries in pathway map00010 or ko00010
-    /link/rn/map00010 or /link/rn/rn00010
-        List of reaction entries in pathway map00010 or rn00010
-    /link/ec/map00010 or /link/ec/ec00010
-        List of EC number entries in pathway map00010 or ec00010
-    /link/cpd/map00010
-        List of compound entries in pathway map00010
+    Getting all the E. coli genes that are related to a specific pathway::
+
+        path2genes, genes2path = keggrest.KEGGlink('ec', 'map00010')
+
+    Getting all the connections between human genes and pathways::
+
+        path2genes, gene2paths = keggrest.KEGGlink('hsa', 'pathway')
+
+    The reverse operation also works::
+
+        gene2paths, path2genes = keggrest.KEGGlink('pathway', 'hsa')
     """
 
     data = RESTrequest(u'link', db1, db2, **kwargs)
