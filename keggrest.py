@@ -9,6 +9,13 @@ import requests
 from collections import defaultdict
 
 # %%
+# compatibility layer for the test
+try:
+    basestring
+except NameError:
+    basestring = str
+
+# %%
 
 
 def get_possible_kegg_actions():
@@ -40,7 +47,8 @@ def _generate_keggrest_request(*args):
         errors_str = ("the requested action `{}` "
                       "is not in the list of correct ones: {}")
         raise ValueError(errors_str.format(action, "; ".join(valid_actions)))
-
+    args = [arg if isinstance(arg, basestring) else u"+".join(arg)
+            for arg in args]
     return 'http://rest.kegg.jp/' + "/".join(args)
 
 
@@ -201,23 +209,25 @@ def KEGGlist(db, organism=u''):
     EXAMPLES
     =========
 
-    /list/pathway
-        returns the list of reference pathways
-    /list/pathway/hsa
-        returns the list of human pathways
-    /list/organism
-        returns the list of KEGG organisms with taxonomic classification
-    /list/hsa
-        returns the entire list of human genes
-    /list/T01001
-        same as above
-    /list/hsa:10458+ece:Z5100
-        returns the list of a human gene and an E.coli O157 gene
-    /list/cpd:C01290+gl:G00092
-        returns the list of a compound entry and a glycan entry
-    /list/C01290+G00092
-        same as above
+    get the list of all the pathways::
 
+        path_list = KEGGlist('pathway')
+
+    get the list only for humans::
+
+        path_list_human = KEGGlist('pathway', 'hsa')
+
+    get the list of all the organisms present in KEGG::
+
+        organism_list = KEGGlist('organism')
+
+    to obtain information about a subset of elements, you can pass
+    them as a single string merged by `+` (the raw REST syntax)
+    or as an iterable, that will be merged automatically.
+    the following two lines are perfectly equivalent::
+
+        data = keggrest.KEGGlist(['cpd:C01290', 'gl:G00092'])
+        data = keggrest.KEGGlist('cpd:C01290+gl:G00092')
     """
 
     data = _RESTrequest(u'list', db, organism)

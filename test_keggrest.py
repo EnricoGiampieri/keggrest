@@ -152,6 +152,36 @@ class test_Keggrest(unittest.TestCase):
                     }
         self.assertEqual(data, expected)
 
+    @responses.activate
+    def test_KEGGlist_2_database_element_with_sum(self):
+        responses.add(responses.GET,
+                      kegg_url+u'/list/cpd:C01290+gl:G00092/',
+                      body="""
+                           cpd:C01290\tdescription1
+                           gl:G00092\tdescription2
+                           """)
+        data = keggrest.KEGGlist('cpd:C01290+gl:G00092')
+        self.assertTrue(data is not None)
+        expected = {'cpd:C01290': 'description1',
+                    'gl:G00092': 'description2',
+                    }
+        self.assertEqual(data, expected)
+
+    @responses.activate
+    def test_KEGGlist_2_database_element_with_seq(self):
+        responses.add(responses.GET,
+                      kegg_url+u'/list/cpd:C01290+gl:G00092/',
+                      body="""
+                           cpd:C01290\tdescription1
+                           gl:G00092\tdescription2
+                           """)
+        data = keggrest.KEGGlist(['cpd:C01290', 'gl:G00092'])
+        self.assertTrue(data is not None)
+        expected = {'cpd:C01290': 'description1',
+                    'gl:G00092': 'description2',
+                    }
+        self.assertEqual(data, expected)
+
 
 
 if __name__ == '__main__':
