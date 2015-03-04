@@ -2,6 +2,7 @@
 """
 Kegg library to connect with the REST API
 """
+from __future__ import absolute_import, unicode_literals, print_function
 
 # %%
 import requests
@@ -161,34 +162,44 @@ def KEGGlink(db1, db2):
     return _double_way_hashtable(couples)
 
 
-def KEGGlist(db, organism=u'', **kwargs):
+def KEGGlist(db, organism=u''):
     """link the content of a specific database
 
     it returns a dictionary containing the database entries description
 
-    ===
     USAGE
-    ===
+    ========
 
-    http://rest.kegg.jp/list/<database>
-    <database> = pathway | brite | module | disease | drug | environ | ko | genome |
-                 <org> | compound | glycan | reaction | rpair | rclass | enzyme |
-                 organism
-    <org> = KEGG organism code or T number
+    Given the name of a database, returns all the entries of that database
+    including a short description of them.
 
-    http://rest.kegg.jp/list/<database>/<org>
-    <database> = pathway | module
-    <org> = KEGG organism code
+    After the name of the database a specific organism can be inserted to
+    include only the entries related to the given organism.
 
-    http://rest.kegg.jp/list/<dbentries>
-    <dbentries> = KEGG database entries involving the following <database>
-    <database> = pathway | brite | module | disease | drug | environ | ko | genome |
-                 <org> | compound | glycan | reaction | rpair | rclass | enzyme
-    <org> = KEGG organism code or T number
+    If a single element is used instead of the database, the description
+    of that element is returned.
 
-    ===
+    the databases could be one of the following:
+        * pathway
+        * brite
+        * module
+        * disease
+        * drug
+        * environ
+        * ko
+        * genome
+        * <org>
+        * compound
+        * glycan
+        * reaction
+        * rpair
+        * rclass
+        * enzyme
+        * organism
+
+
     EXAMPLES
-    ===
+    =========
 
     /list/pathway
         returns the list of reference pathways
@@ -209,24 +220,24 @@ def KEGGlist(db, organism=u'', **kwargs):
 
     """
 
-    data = RESTrequest(u'list', db, organism, **kwargs)
+    data = RESTrequest(u'list', db, organism)
     data = _split_lines(data)
     return dict(data)
 
 
-def KEGGfind(database, searchterm, **kwargs):
+def KEGGfind(database, searchterm):
     """retrieve all the elements in all the databases that are
     related to the given search string
 
     it returns a dictionary containing the obtained entries description
     """
 
-    data = RESTrequest(u'find', database, searchterm, **kwargs)
+    data = RESTrequest(u'find', database, searchterm)
     data = _split_lines(data)
     return dict(data)
 
 
-def KEGGconv(db1, db2, **kwargs):
+def KEGGconv(db1, db2):
     """convert an element to or from an outside database
 
     ===
@@ -271,13 +282,13 @@ def KEGGconv(db1, db2, **kwargs):
         conversion from NCBI GI to KEGG ID when the organism code is not known
 
     """
-    data = RESTrequest(u'conv', db1, db2, **kwargs)
+    data = RESTrequest(u'conv', db1, db2)
     couples = _split_lines(data)
     return _double_way_hashtable(couples)
 
 
 
-def KEGGget(element, option=u'', parse_reference=True, **kwargs):
+def KEGGget(element, option=u'', parse_reference=True):
     """retrieve an element from a  database
 
     currently it doesn't work when options are used
@@ -314,7 +325,7 @@ def KEGGget(element, option=u'', parse_reference=True, **kwargs):
     /get/hsa05130/kgml
         retrieves the kgml file of a pathway map
     """
-    data = RESTrequest(u'get', element, option, **kwargs)
+    data = RESTrequest(u'get', element, option)
     data = data.split(u'\n')
     grouped = list(l.split(u' ', 1) for l in data)
     grouped = [l for l in grouped if len(l) > 1]
