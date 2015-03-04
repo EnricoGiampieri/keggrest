@@ -2,7 +2,7 @@
 import os
 from setuptools import setup
 
-# Utility function to read the README file.  
+# Utility function to read the README file.
 # Used for the long_description.  It's nice, because now 1) we have a top level
 # README file and 2) it's easier to type in the README file than to put a raw
 # string in below ...
@@ -18,7 +18,7 @@ setup(name='keggrest',
       download_url='https://github.com/EnricoGiampieri/keggrest.git',
       url='https://github.com/EnricoGiampieri/keggrest.git',
       license = "BSD",
-      long_description=read('README.txt'),
+      long_description=read('README.md'),
       keywords = "rest API bioinformatics",
       classifiers=[
           "License :: OSI Approved :: BSD License",
@@ -26,6 +26,7 @@ setup(name='keggrest',
           "Intended Audience :: Science/Research",
           "Operating System :: OS Independent",
           "Programming Language :: Python :: 3.4",
+          "Programming Language :: Python :: 2.7",
           "Topic :: Scientific/Engineering :: Bio-Informatics",
           ],
       )
