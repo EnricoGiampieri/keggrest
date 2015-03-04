@@ -10,7 +10,7 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(name='keggrest',
-      version='0.1.1',
+      version='0.1.2',
       description='Basic frontend for the kegg database rest API',
       author='Enrico Giampieri',
       author_email='enrico.giampieri@unibo.it',
@@ -25,7 +25,7 @@ setup(name='keggrest',
           "Development Status :: 3 - Alpha",
           "Intended Audience :: Science/Research",
           "Operating System :: OS Independent",
-          "Programming Language :: Python :: 2.7",
+          "Programming Language :: Python :: 3.4",
           "Topic :: Scientific/Engineering :: Bio-Informatics",
           ],
       )

@@ -1,0 +1,8 @@
+.spyderworkspace
+*.pyc
+*.dump
+./keggrest/.spyderworkspace
+.spyderproject
+*coverage*
+.log
+*.log
