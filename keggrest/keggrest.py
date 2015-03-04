@@ -1,23 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Database           Name           Abbrev         kid     Remark
-KEGG PATHWAY     pathway     path     map number
-KEGG BRITE           brite     br     br number
-KEGG MODULE     module     md     M number
-KEGG DISEASE     disease     ds     H number     Japanese version: disease_ja ds_ja
-KEGG DRUG           drug           dr     D number     Japanese version: drug_ja dr_ja
-KEGG ENVIRON     environ     ev     E number     Japanese version: environ_ja ev_ja
-KEGG ORTHOLOGY     orthology     ko     K number
-KEGG GENOME     genome     genome     T number
-KEGG GENOMES     genomes     gn     T number     Composite database: genome + egenome + mgenome
-KEGG GENES           genes     -     -     Composite database: consisting of KEGG organisms
-KEGG LIGAND     ligand     ligand     -     Composite database: compound + glycan + reaction + rpair + rclass + enzyme
-KEGG COMPOUND     compound     cpd     C number     Japanese version: compound_ja cpd_ja
-KEGG GLYCAN     glycan     gl     G number
-KEGG REACTION     reaction     rn     R number
-KEGG RPAIR           rpair     rp     RP number
-KEGG RCLASS     rclass     rc     RC number
-KEGG ENZYME     enzyme     ec     -
+Kegg library to connect with the REST API
 """
 
 # %%
@@ -34,13 +17,20 @@ def get_possible_kegg_actions():
 
 
 def _generate_keggrest_request(*args):
-    """join the pieces and generate the rest request.
+    """Join the pieces and generate the rest request.
 
     Check for correct action, raises ValueError if the action is not a
     legitimate one.
 
     legitimate actions:
-    ['info', 'list', 'find', 'get', 'conv', 'link']
+        * info
+        * list
+        * find
+        * get
+        * conv
+        * link
+
+    see the function **get_possible_kegg_actions**
     """
     action = args[0]
     valid_actions = get_possible_kegg_actions()
@@ -96,8 +86,11 @@ def _double_way_hashtable(list_of_couples):
 
 
 def RESTrequest(*args):
-    """dumps the result from the KEGG REST API
+    """Dumps the result from the KEGG REST API
+
+    It is a wrapper around a **requests** library call.
     """
+
     request = _generate_keggrest_request(*args)
     # this could rise a ConnectionsError
     result = requests.get(request, timeout=None)
