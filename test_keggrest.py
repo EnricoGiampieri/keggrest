@@ -10,7 +10,7 @@ import unittest
 
 import responses
 
-import keggrest
+from . import keggrest
 
 # %%
 

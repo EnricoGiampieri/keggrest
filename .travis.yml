@@ -1,0 +1,19 @@
+language: python
+python:
+  - "3.4"
+  - "3.3"
+  - "2.7"
+  - "2.6"
+  - "pypy"
+# command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
+install:
+  - "pip install requests"
+  - "pip install responses"
+  
+# whitelist
+branches:
+  only:
+    - master
+    - dev
+# command to run tests, e.g. python setup.py test
+script:  nosetests
