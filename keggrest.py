@@ -235,14 +235,69 @@ def KEGGlist(db, organism=u''):
     return dict(data)
 
 
-def KEGGfind(database, searchterm):
-    """retrieve all the elements in all the databases that are
-    related to the given search string
+def KEGGfind(database, *searchterm):
+    """Retrieve the elements in a databases related to the given search string
 
-    it returns a dictionary containing the obtained entries description
+    It returns a dictionary containing the obtained entries description
+
+    Notes
+    =======
+    The first form searches entry identifier and associated fields
+    shown below for matching keywords.
+    Database	Search fields (see flat file format)
+        * pathway:    ENTRY and NAME
+        * module:    ENTRY and NAME
+        * disease:    ENTRY and NAME
+        * drug:    ENTRY and NAME
+        * environ:    ENTRY and NAME
+        * ko:    ENTRY, NAME and DEFINITION
+        * genome:    ENTRY, NAME and DEFINITION
+        * <org>:    ENTRY, NAME, DEFINITION and ORTHOLOGY
+        * compound:    ENTRY and NAME
+        * glycan:    ENTRY, NAME, COMPOSITION and CLASS
+        * reaction:    ENTRY, NAME and DEFINITION
+        * rpair:    ENTRY and NAME
+        * rclass:    ENTRY, NAME and DEFINITION
+        * enzyme:    ENTRY and NAME
+
+    In the second form the chemical formula search is a partial match
+    irrespective of the order of atoms given. The exact mass (or molecular
+    weight) is checked by rounding off to the same decimal place
+    as the query data. A range of values may also be specified with
+    the minus(-) sign.
+
+    Examples
+    ===============
+
+    find the compounds with a molecular weight between 300 and 310 (included)::
+
+        compunds = keggrest.KEGGfind('compound', '300-310', 'mol_weight')
+
+    same procedure, using the exact mass of the compound
+    (for 174.045 =< exact mass < 174.055)::
+
+        compunds = keggrest.KEGGfind('compound', '174.05', 'exact_mass')
+
+    now the search use the formula of the compound,
+    selecting for a subcomponent::
+
+        # contains "C7H10O5"
+        compunds = keggrest.KEGGfind('compound', 'C7H10O5', 'formula')
+        # contains "O5" and "C7"
+        compunds = keggrest.KEGGfind('compound', 'O5C7', 'formula')
+
+    select all the genes with that include the keywords 'shiga' and 'toxin'::
+
+        genes = keggrest.KEGGfind('genes', 'shiga+toxin')
+        genes = keggrest.KEGGfind('genes', ['shiga', 'toxin'])
+
+    if the keyword should contain a space, it should be enclosed in
+    double apices, so the external apices are necessary::
+
+        keggrest.KEGGfind('genes', '"shiga toxin"')
     """
 
-    data = _RESTrequest(u'find', database, searchterm)
+    data = _RESTrequest(u'find', database, *searchterm)
     data = _split_lines(data)
     return dict(data)
 
