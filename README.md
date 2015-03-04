@@ -1,6 +1,8 @@
 keggrest
 ========
 
+[![Build Status](https://travis-ci.org/EnricoGiampieri/keggrest.svg)](https://travis-ci.org/EnricoGiampieri/keggrest)
+
 implementation of the rest API to access the kegg database
 
 Implemented functions
