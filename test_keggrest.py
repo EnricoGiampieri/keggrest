@@ -102,8 +102,8 @@ class test_Utilities(unittest.TestCase):
             data = keggrest._split_lines(data)
             dict_dir, dict_inv = keggrest._double_way_hashtable(data)
         expected = ("the line need to have two elements to be split,"
-                    " received: ('path:path0000',)")
-        obtained = str(cm.exception)
+                    " received:")
+        obtained = str(cm.exception)[:len(expected)]
         self.assertEqual(obtained, expected)
 # %%
 
