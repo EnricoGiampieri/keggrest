@@ -86,7 +86,7 @@ def _double_way_hashtable(list_of_couples):
 # %%
 
 
-def RESTrequest(*args):
+def _RESTrequest(*args):
     """Dumps the result from the KEGG REST API
 
     It is a wrapper around a **requests** library call.
@@ -157,7 +157,7 @@ def KEGGlink(db1, db2):
         gene2paths, path2genes = keggrest.KEGGlink('pathway', 'hsa')
     """
 
-    data = RESTrequest(u'link', db1, db2)
+    data = _RESTrequest(u'link', db1, db2)
     couples = _split_lines(data)
     return _double_way_hashtable(couples)
 
@@ -220,7 +220,7 @@ def KEGGlist(db, organism=u''):
 
     """
 
-    data = RESTrequest(u'list', db, organism)
+    data = _RESTrequest(u'list', db, organism)
     data = _split_lines(data)
     return dict(data)
 
@@ -232,7 +232,7 @@ def KEGGfind(database, searchterm):
     it returns a dictionary containing the obtained entries description
     """
 
-    data = RESTrequest(u'find', database, searchterm)
+    data = _RESTrequest(u'find', database, searchterm)
     data = _split_lines(data)
     return dict(data)
 
@@ -282,7 +282,7 @@ def KEGGconv(db1, db2):
         conversion from NCBI GI to KEGG ID when the organism code is not known
 
     """
-    data = RESTrequest(u'conv', db1, db2)
+    data = _RESTrequest(u'conv', db1, db2)
     couples = _split_lines(data)
     return _double_way_hashtable(couples)
 
@@ -325,7 +325,7 @@ def KEGGget(element, option=u'', parse_reference=True):
     /get/hsa05130/kgml
         retrieves the kgml file of a pathway map
     """
-    data = RESTrequest(u'get', element, option)
+    data = _RESTrequest(u'get', element, option)
     data = data.split(u'\n')
     grouped = list(l.split(u' ', 1) for l in data)
     grouped = [l for l in grouped if len(l) > 1]
