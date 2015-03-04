@@ -53,7 +53,58 @@ class test_Utilities(unittest.TestCase):
         expected = []
         self.assertEqual(new_data, expected)
 
+    # %% double_way_hashtable
+    def test_double_way_hashtable_no_link(self):
+        data = ''
+        data = keggrest._split_lines(data)
+        dict_dir, dict_inv = keggrest._double_way_hashtable(data)
+        self.assertEqual(dict_dir, {})
+        self.assertEqual(dict_inv, {})
 
+    def test_double_way_hashtable_single_link(self):
+        data = """
+               path:path0000 \t hsa:hsa000001
+               """
+        data = keggrest._split_lines(data)
+        dict_dir, dict_inv = keggrest._double_way_hashtable(data)
+        self.assertEqual(dict_dir, {'path:path0000': ['hsa:hsa000001']})
+        self.assertEqual(dict_inv, {'hsa:hsa000001': ['path:path0000']})
+
+    def test_double_way_hashtable_double_link_first(self):
+        data = """
+               path:path0000 \t hsa:hsa000001
+               path:path0000 \t hsa:hsa000002
+               """
+        data = keggrest._split_lines(data)
+        dict_dir, dict_inv = keggrest._double_way_hashtable(data)
+        self.assertEqual(dict_dir, {'path:path0000': ['hsa:hsa000001',
+                                                      'hsa:hsa000002']})
+        self.assertEqual(dict_inv, {'hsa:hsa000001': ['path:path0000'],
+                                    'hsa:hsa000002': ['path:path0000']})
+
+    def test_double_way_hashtable_double_link_second(self):
+        data = """
+               path:path0000 \t hsa:hsa000001
+               path:path0001 \t hsa:hsa000001
+               """
+        data = keggrest._split_lines(data)
+        dict_dir, dict_inv = keggrest._double_way_hashtable(data)
+        self.assertEqual(dict_dir, {'path:path0000': ['hsa:hsa000001'],
+                                    'path:path0001': ['hsa:hsa000001']})
+        self.assertEqual(dict_inv, {'hsa:hsa000001': ['path:path0000',
+                                                      'path:path0001']})
+
+    def test_double_way_hashtable_invalid(self):
+        data = """
+               path:path0000
+               """
+        with self.assertRaises(ValueError) as cm:
+            data = keggrest._split_lines(data)
+            dict_dir, dict_inv = keggrest._double_way_hashtable(data)
+        expected = ("the line need to have two elements to be split,"
+                    " received: ('path:path0000',)")
+        obtained = str(cm.exception)
+        self.assertEqual(obtained, expected)
 # %%
 
 ###############################################################################
@@ -101,58 +152,7 @@ class test_Keggrest(unittest.TestCase):
                     }
         self.assertEqual(data, expected)
 
-    # %% double_way_hashtable
-    def test_double_way_hashtable_no_link(self):
-        data = ''
-        data = keggrest._split_lines(data)
-        dict_dir, dict_inv = keggrest._double_way_hashtable(data)
-        self.assertEqual(dict_dir, {})
-        self.assertEqual(dict_inv, {})
 
-    def test_double_way_hashtable_single_link(self):
-        data = """
-               path:path0000 \t hsa:hsa000001
-               """
-        data = keggrest._split_lines(data)
-        dict_dir, dict_inv = keggrest._double_way_hashtable(data)
-        self.assertEqual(dict_dir, {'path:path0000': ['hsa:hsa000001']})
-        self.assertEqual(dict_inv, {'hsa:hsa000001': ['path:path0000']})
-
-    def test_double_way_hashtable_double_link_first(self):
-        data = """
-               path:path0000 \t hsa:hsa000001
-               path:path0000 \t hsa:hsa000002
-               """
-        data = keggrest._split_lines(data)
-        dict_dir, dict_inv = keggrest._double_way_hashtable(data)
-        self.assertEqual(dict_dir, {'path:path0000': ['hsa:hsa000001',
-                                                      'hsa:hsa000002']})
-        self.assertEqual(dict_inv, {'hsa:hsa000001': ['path:path0000'],
-                                    'hsa:hsa000002': ['path:path0000']})
-
-    def test_double_way_hashtable_double_link_second(self):
-        data = """
-               path:path0000 \t hsa:hsa000001
-               path:path0001 \t hsa:hsa000001
-               """
-        data = keggrest._split_lines(data)
-        dict_dir, dict_inv = keggrest._double_way_hashtable(data)
-        self.assertEqual(dict_dir, {'path:path0000': ['hsa:hsa000001'],
-                                    'path:path0001': ['hsa:hsa000001']})
-        self.assertEqual(dict_inv, {'hsa:hsa000001': ['path:path0000',
-                                                      'path:path0001']})
-
-    def test_KEGGlist_invalid(self):
-        data = """
-               path:path0000
-               """
-        with self.assertRaises(ValueError) as cm:
-            data = keggrest._split_lines(data)
-            dict_dir, dict_inv = keggrest._double_way_hashtable(data)
-        expected = ("the line need to have two elements to be split,"
-                    " received: ('path:path0000',)")
-        obtained = str(cm.exception)
-        self.assertEqual(obtained, expected)
 
 if __name__ == '__main__':
     unittest.main()
